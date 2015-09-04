@@ -8,22 +8,23 @@ import java.util.concurrent.TimeoutException;
 /**
  * Created by sunyiwei on 2015/9/4.
  */
-public class NewRecv {
-    private static String QUEUE_NAME = "hello world!";
+public class BroadCastRecv {
+    private static String EXCHANGE_NAME = "logs";
 
     public static void main(String[] args) throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
-
         Connection connection = factory.newConnection();
         final Channel channel = connection.createChannel();
 
-        //Consumes...
-        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+        channel.basicQos(1);
+        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+        String queueName = channel.queueDeclare().getQueue();
+        channel.queueBind(queueName, EXCHANGE_NAME, "");
+
         System.out.println("[X] Waiting for messages. To exit press Ctrl+C...");
 
-        channel.basicQos(1);
-        Consumer consumer = new DefaultConsumer(channel) {
+        Consumer consumer = new DefaultConsumer(channel){
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String msg = new String(body, "utf-8");
@@ -40,8 +41,6 @@ public class NewRecv {
             }
         };
 
-        channel.basicConsume(QUEUE_NAME, false, consumer);
+        channel.basicConsume(queueName, false, consumer);
     }
-
-
 }
