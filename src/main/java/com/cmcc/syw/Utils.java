@@ -25,11 +25,9 @@ public class Utils {
     }
 
     public static void doWork(String msg) throws InterruptedException {
-        for (char c : msg.toCharArray()) {
-            if (c == '.') {
-                System.out.println(Thread.currentThread().getName() + "sleeps...zzzz...");
-                Thread.sleep(1000);
-            }
+        String[] msgs = msg.split(".");
+        for (String s : msgs) {
+            System.out.println(Thread.currentThread().getName() + ": " + s);
         }
     }
 }
