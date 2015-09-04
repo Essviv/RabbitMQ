@@ -10,9 +10,8 @@ import java.util.concurrent.TimeoutException;
 /**
  * Created by cmcc on 2015/9/4.
  */
-public class RoutingSend {
-    private static String EXCHANGE_NAME="Routing";
-    private static String ROUTING_KEY = "routing_key_";
+public class TopicRoutingSend {
+    private static String EXCHANGE_NAME="TopicRouting";
 
     public static void main(String[] args) throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
@@ -21,11 +20,12 @@ public class RoutingSend {
         //establish connection
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
-        channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+        channel.exchangeDeclare(EXCHANGE_NAME, "topic");
 
         //publish
         String msg = Utils.getMsg(args);
-        channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, null, msg.getBytes());
+        String routingKey = Utils.getRoutingKey(args);
+        channel.basicPublish(EXCHANGE_NAME, routingKey, null, msg.getBytes());
 
         //close
         channel.close();

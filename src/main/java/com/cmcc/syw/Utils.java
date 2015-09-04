@@ -31,4 +31,8 @@ public class Utils {
             Thread.sleep(1000);
         }
     }
+
+    public static String getRoutingKey(String[] args){
+        return joinStr(args);
+    }
 }
