@@ -25,9 +25,10 @@ public class Utils {
     }
 
     public static void doWork(String msg) throws InterruptedException {
-        String[] msgs = msg.split(".");
+        String[] msgs = msg.split("\\.");
         for (String s : msgs) {
             System.out.println(Thread.currentThread().getName() + ": " + s);
+            Thread.sleep(1000);
         }
     }
 }
