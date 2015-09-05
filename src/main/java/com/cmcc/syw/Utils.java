@@ -35,4 +35,12 @@ public class Utils {
     public static String getRoutingKey(String[] args){
         return joinStr(args);
     }
+
+    public static int calFibonaci(int n){
+        if(n==0 || n==1){
+            return 1;
+        }
+
+        return calFibonaci(n-1)+calFibonaci(n-2);
+    }
 }
